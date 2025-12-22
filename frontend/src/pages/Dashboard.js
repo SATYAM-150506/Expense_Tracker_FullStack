@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { expenseAPI } from '../services/api';
 import ExpenseForm from '../components/ExpenseForm';
 import ExpenseStats from '../components/ExpenseStats';
+import ExpensePieChart from '../components/ExpensePieChart';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
+import { useTheme } from '../context/ThemeContext';
 
 const Dashboard = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { isDarkMode } = useTheme();
   const [expenses, setExpenses] = useState([]);
   const [stats, setStats] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -156,11 +159,11 @@ const Dashboard = () => {
 
   if (loading && expenses.length === 0) {
     return (
-      <div className="min-h-screen bg-gray-50 py-8">
+      <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} py-8`}>
         <div className="container mx-auto px-4">
           <div className="text-center mt-24">
             <div className="inline-block w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
-            <p className="text-gray-600 mt-4">Loading your expenses...</p>
+            <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mt-4`}>Loading your expenses...</p>
           </div>
         </div>
       </div>
@@ -168,24 +171,24 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'} py-8 transition-colors`}>
       <div className="container mx-auto px-4 max-w-7xl animate-fadeIn">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
           <div className="mb-6 md:mb-0">
-            <h1 className="text-4xl font-bold text-primary-600 mb-2">
+            <h1 className={`text-4xl font-bold ${isDarkMode ? 'text-primary-400' : 'text-primary-600'} mb-2`}>
               💰 Expense Tracker Dashboard
             </h1>
-            <p className="text-gray-600 text-lg">
+            <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-lg`}>
               Manage your finances with ease - Welcome to your personal expense tracker
             </p>
           </div>
           <div className="flex flex-col sm:flex-row gap-3">
-            <Link to="/expenses" className="btn btn-secondary">
+            <Link to="/expenses" className={`px-4 py-2 rounded-lg font-medium transition-colors ${isDarkMode ? 'bg-gray-800 text-white hover:bg-gray-700' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}>
               📊 View All Expenses
             </Link>
             <button 
-              className="btn btn-primary"
+              className={`px-4 py-2 rounded-lg font-medium transition-colors ${isDarkMode ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-primary-600 text-white hover:bg-primary-700'}`}
               onClick={() => {
                 setEditingExpense(null);
                 setShowForm(true);
@@ -198,7 +201,7 @@ const Dashboard = () => {
 
         {/* Error Message */}
         {error && (
-          <div className="bg-danger-50 border border-danger-200 text-danger-700 px-4 py-3 rounded-lg mb-6">
+          <div className={`${isDarkMode ? 'bg-red-900/30 border-red-700 text-red-300' : 'bg-danger-50 border-danger-200 text-danger-700'} border px-4 py-3 rounded-lg mb-6`}>
             <span className="flex items-center">
               <span className="mr-2">⚠️</span>
               {error}
@@ -209,14 +212,21 @@ const Dashboard = () => {
         {/* Stats Section */}
         {stats && <ExpenseStats stats={stats} />}
 
+        {/* Pie Chart Section */}
+        {stats && (
+          <div className="mt-8">
+            <ExpensePieChart stats={stats} />
+          </div>
+        )}
+
         {/* Filters */}
-        <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-          <h3 className="text-xl font-semibold text-gray-800 mb-4">Filter Expenses</h3>
+        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-6 mb-8 mt-8`}>
+          <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'} mb-4`}>Filter Expenses</h3>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Category</label>
+              <label className={`block text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Category</label>
               <select
-                className="form-select"
+                className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-800'} focus:outline-none focus:ring-2 focus:ring-primary-500`}
                 value={filters.category}
                 onChange={(e) => handleFilterChange({ ...filters, category: e.target.value })}
               >
@@ -234,9 +244,9 @@ const Dashboard = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">Start Date</label>
+              <label className={`block text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} mb-2`}>Start Date</label>
               <input
-                className="form-input"
+                className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-800'} focus:outline-none focus:ring-2 focus:ring-primary-500`}
                 type="date"
                 value={filters.startDate}
                 onChange={(e) => handleFilterChange({ ...filters, startDate: e.target.value })}
@@ -244,9 +254,9 @@ const Dashboard = () => {
             </div>
             
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">End Date</label>
+              <label className={`block text-sm font-medium ${isDarkMode ? 'text-gray-300' : 'text-gray-700'} mb-2`}>End Date</label>
               <input
-                className="form-input"
+                className={`w-full px-3 py-2 border rounded-lg ${isDarkMode ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-800'} focus:outline-none focus:ring-2 focus:ring-primary-500`}
                 type="date"
                 value={filters.endDate}
                 onChange={(e) => handleFilterChange({ ...filters, endDate: e.target.value })}
@@ -255,7 +265,7 @@ const Dashboard = () => {
             
             <div className="flex items-end">
               <button 
-                className="btn btn-outline w-full"
+                className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${isDarkMode ? 'bg-gray-700 text-white hover:bg-gray-600' : 'bg-gray-200 text-gray-800 hover:bg-gray-300'}`}
                 onClick={() => setFilters({ category: 'All', startDate: '', endDate: '' })}
               >
                 Clear Filters
@@ -267,7 +277,7 @@ const Dashboard = () => {
         {/* Expense Form Modal */}
         {showForm && (
           <div className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center p-4 animate-fadeIn">
-            <div className="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-slideUp">
+            <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto animate-slideUp`}>
               <ExpenseForm
                 expense={editingExpense}
                 onSubmit={handleExpenseSubmit}
@@ -281,15 +291,15 @@ const Dashboard = () => {
         )}
 
         {/* Expenses Grid */}
-        <div className="bg-white rounded-lg shadow-md p-6">
+        <div className={`${isDarkMode ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-6`}>
           <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6">
-            <h3 className="text-xl font-semibold text-gray-800 mb-2 sm:mb-0">Recent Expenses</h3>
+            <h3 className={`text-xl font-semibold ${isDarkMode ? 'text-white' : 'text-gray-800'} mb-2 sm:mb-0`}>Recent Expenses</h3>
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 sm:gap-4">
-              <p className="text-gray-600 text-sm">
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} text-sm`}>
                 {expenses.length > 5 ? 'Showing latest 5 of ' : ''}{expenses.length} expense{expenses.length !== 1 ? 's' : ''}
               </p>
               {expenses.length > 5 && (
-                <Link to="/expenses" className="btn btn-sm btn-primary">
+                <Link to="/expenses" className={`px-3 py-1 rounded text-sm font-medium ${isDarkMode ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-primary-600 text-white hover:bg-primary-700'}`}>
                   View All →
                 </Link>
               )}
@@ -299,19 +309,19 @@ const Dashboard = () => {
           {loading ? (
             <div className="text-center py-12">
               <div className="inline-block w-8 h-8 border-4 border-primary-500 border-t-transparent rounded-full animate-spin"></div>
-              <p className="text-gray-600 mt-4">Loading expenses...</p>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-600'} mt-4`}>Loading expenses...</p>
             </div>
           ) : expenses.length === 0 ? (
             <div className="text-center py-12">
               <div className="text-6xl mb-4">📊</div>
-              <h3 className="text-xl text-gray-600 mb-2">No expenses found</h3>
-              <p className="text-gray-500 mb-6">
+              <h3 className={`text-xl ${isDarkMode ? 'text-gray-300' : 'text-gray-600'} mb-2`}>No expenses found</h3>
+              <p className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} mb-6`}>
                 {filters.category !== 'All' || filters.startDate || filters.endDate
                   ? 'Try adjusting your filters to see more expenses.'
                   : 'Get started by adding your first expense.'}
               </p>
               <button 
-                className="btn btn-primary"
+                className={`px-4 py-2 rounded-lg font-medium transition-colors ${isDarkMode ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-primary-600 text-white hover:bg-primary-700'}`}
                 onClick={() => {
                   setEditingExpense(null);
                   setShowForm(true);
@@ -325,35 +335,35 @@ const Dashboard = () => {
               {expenses.slice(0, 5).map((expense) => (
                 <div 
                   key={expense._id} 
-                  className="expense-card card-large cursor-pointer transform transition-all duration-200 hover:scale-105"
+                  className={`${isDarkMode ? 'bg-gray-700 hover:bg-gray-600' : 'bg-white hover:shadow-xl'} rounded-2xl p-6 cursor-pointer transform transition-all duration-200 hover:scale-105 shadow-lg border ${isDarkMode ? 'border-gray-600' : 'border-gray-100'}`}
                   onClick={() => handleViewExpense(expense)}
                 >
                   <div className="flex justify-between items-start mb-4">
-                    <h4 className="font-bold text-lg text-gray-800 truncate flex-1">{expense.title}</h4>
-                    <div className="text-xl font-bold text-primary-600 ml-3">
+                    <h4 className={`font-bold text-lg ${isDarkMode ? 'text-white' : 'text-gray-800'} truncate flex-1`}>{expense.title}</h4>
+                    <div className={`text-xl font-bold ${isDarkMode ? 'text-primary-400' : 'text-primary-600'} ml-3`}>
                       {formatCurrency(expense.amount)}
                     </div>
                   </div>
                   
-                  <div className="flex justify-between items-center mb-4 text-sm text-gray-600">
-                    <div className="flex items-center bg-gray-50 px-3 py-1.5 rounded-full">
+                  <div className={`flex justify-between items-center mb-4 text-sm ${isDarkMode ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <div className={`flex items-center ${isDarkMode ? 'bg-gray-600' : 'bg-gray-50'} px-3 py-1.5 rounded-full`}>
                       <span className="mr-2 text-base">{getCategoryEmoji(expense.category)}</span>
                       <span className="font-medium">{expense.category}</span>
                     </div>
-                    <div className="text-gray-500 font-medium">
+                    <div className={`${isDarkMode ? 'text-gray-400' : 'text-gray-500'} font-medium`}>
                       {formatDate(expense.date)}
                     </div>
                   </div>
                   
                   {expense.description && (
-                    <div className="text-sm text-gray-600 mb-6 line-clamp-2 bg-gray-50 p-3 rounded-lg">
+                    <div className={`text-sm ${isDarkMode ? 'bg-gray-600 text-gray-200' : 'bg-gray-50 text-gray-600'} mb-6 line-clamp-2 p-3 rounded-lg`}>
                       {expense.description}
                     </div>
                   )}
                   
-                  <div className="flex gap-3 mt-auto pt-4 border-t border-gray-100">
+                  <div className={`flex gap-3 mt-auto pt-4 border-t ${isDarkMode ? 'border-gray-600' : 'border-gray-100'}`}>
                     <button 
-                      className="btn btn-sm btn-ghost flex-1"
+                      className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${isDarkMode ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-gray-100 text-gray-800 hover:bg-gray-200'}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleViewExpense(expense);
@@ -362,7 +372,7 @@ const Dashboard = () => {
                       👁️ View
                     </button>
                     <button 
-                      className="btn btn-sm btn-outline flex-1"
+                      className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${isDarkMode ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-primary-100 text-primary-700 hover:bg-primary-200'}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleEditExpense(expense);
@@ -371,7 +381,7 @@ const Dashboard = () => {
                       ✏️ Edit
                     </button>
                     <button 
-                      className="btn btn-sm btn-danger flex-1"
+                      className={`flex-1 px-3 py-2 rounded text-sm font-medium transition-colors ${isDarkMode ? 'bg-red-900/50 text-red-300 hover:bg-red-900' : 'bg-red-100 text-red-700 hover:bg-red-200'}`}
                       onClick={(e) => {
                         e.stopPropagation();
                         handleDeleteExpense(expense._id);

@@ -19,10 +19,11 @@ const Login = () => {
     }
   }, [isAuthenticated, navigate]);
 
-  // Clear errors when component mounts
+  // Clear errors when component mounts (only once)
   useEffect(() => {
     clearError();
-  }, [clearError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { email, password } = formData;
 

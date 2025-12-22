@@ -1,6 +1,9 @@
 import React from 'react';
+import { useTheme } from '../context/ThemeContext';
 
 const ExpenseStats = ({ stats }) => {
+  const { isDarkMode } = useTheme();
+
   const formatAmount = (amount) => {
     return new Intl.NumberFormat('en-US', {
       style: 'currency',
@@ -73,8 +76,8 @@ const ExpenseStats = ({ stats }) => {
 
       {/* Category Breakdown */}
       {stats.categoryStats && stats.categoryStats.length > 0 && (
-        <div className="card">
-          <h3 className="text-xl font-bold text-gray-800 mb-6 flex items-center">
+        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+          <h3 className="text-xl font-bold text-gray-800 dark:text-white mb-6 flex items-center">
             <span className="mr-2">📊</span>
             Spending by Category
           </h3>
@@ -96,16 +99,16 @@ const ExpenseStats = ({ stats }) => {
               return (
                 <div 
                   key={index} 
-                  className="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all duration-200 border border-gray-200 hover:shadow-md"
+                  className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl hover:bg-gray-100 dark:hover:bg-gray-600 transition-all duration-200 border border-gray-200 dark:border-gray-600 hover:shadow-md"
                   style={{ borderLeftColor: getCategoryColor(category._id), borderLeftWidth: '4px' }}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white shadow-sm">
+                    <div className="flex items-center justify-center w-10 h-10 rounded-full bg-white dark:bg-gray-800 shadow-sm">
                       <span className="text-xl">{categoryEmoji[category._id] || '📝'}</span>
                     </div>
                     <div>
-                      <span className="font-semibold text-gray-800 text-lg">{category._id}</span>
-                      <div className="text-sm text-gray-600">
+                      <span className="font-semibold text-gray-800 dark:text-white text-lg">{category._id}</span>
+                      <div className="text-sm text-gray-600 dark:text-gray-400">
                         {category.count} expense{category.count !== 1 ? 's' : ''}
                       </div>
                     </div>
@@ -114,7 +117,7 @@ const ExpenseStats = ({ stats }) => {
                   <div className="flex items-center gap-6">
                     {/* Progress Bar */}
                     <div className="flex items-center gap-3">
-                      <div className="w-16 h-2 bg-gray-200 rounded-full overflow-hidden">
+                      <div className="w-16 h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
                         <div 
                           className="h-full transition-all duration-300 rounded-full"
                           style={{ 
@@ -123,7 +126,7 @@ const ExpenseStats = ({ stats }) => {
                           }}
                         />
                       </div>
-                      <span className="text-sm font-medium text-gray-600 w-10">{percentage}%</span>
+                      <span className="text-sm font-medium text-gray-600 dark:text-gray-300 w-10">{percentage}%</span>
                     </div>
                     
                     {/* Amount */}

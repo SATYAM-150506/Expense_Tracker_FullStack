@@ -77,14 +77,6 @@ export const AuthProvider = ({ children }) => {
     }
   }, [state.token]);
 
-  // Check if user is logged in on component mount
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      loadUser();
-    }
-  }, []);
-
   // Load user from token
   const loadUser = async () => {
     dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
@@ -100,9 +92,20 @@ export const AuthProvider = ({ children }) => {
       });
     } catch (error) {
       console.error('Error loading user:', error);
-      logout();
+      localStorage.removeItem('token');
+      dispatch({ type: AUTH_ACTIONS.LOGOUT });
     }
   };
+
+  // Check if user is logged in on component mount
+  useEffect(() => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      loadUser();
+    } else {
+      dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: false });
+    }
+  }, []);
 
   // Register user
   const register = async (userData) => {

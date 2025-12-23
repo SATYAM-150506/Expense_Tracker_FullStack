@@ -91,6 +91,13 @@ module.exports = {
         'slide-up': 'slideUp 0.6s ease-out',
         'bounce-subtle': 'bounceSubtle 2s ease-in-out infinite'
       },
+      animationDelay: {
+        '100': '100ms',
+        '200': '200ms',
+        '300': '300ms',
+        '400': '400ms',
+        '500': '500ms'
+      },
       keyframes: {
         fadeIn: {
           '0%': { opacity: '0' },

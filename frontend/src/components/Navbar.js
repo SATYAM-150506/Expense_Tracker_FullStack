@@ -60,6 +60,32 @@ const Navbar = () => {
                     <span>All Expenses</span>
                   </Link>
                 </li>
+                <li>
+                  <Link 
+                    to="/analytics" 
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActive('/analytics') 
+                        ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' 
+                        : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    <span>📈</span>
+                    <span>Analytics</span>
+                  </Link>
+                </li>
+                <li>
+                  <Link 
+                    to="/insights" 
+                    className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                      isActive('/insights') 
+                        ? 'bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300' 
+                        : 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 hover:bg-gray-50 dark:hover:bg-gray-800'
+                    }`}
+                  >
+                    <span>💡</span>
+                    <span>Insights</span>
+                  </Link>
+                </li>
               </ul>
               
               <div className="flex items-center space-x-4 pl-4 border-l border-gray-200 dark:border-gray-700">

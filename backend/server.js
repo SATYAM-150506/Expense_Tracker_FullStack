@@ -19,6 +19,9 @@ app.use(express.urlencoded({ extended: false }));
 // Routes
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/expenses', require('./routes/expenses'));
+app.use('/api/budgets', require('./routes/budgets'));
+app.use('/api/analytics', require('./routes/analytics'));
+app.use('/api/insights', require('./routes/insights'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {

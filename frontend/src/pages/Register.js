@@ -26,7 +26,8 @@ const Register = () => {
   // Clear errors when component mounts
   useEffect(() => {
     clearError();
-  }, [clearError]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const { name, email, password, confirmPassword } = formData;
 

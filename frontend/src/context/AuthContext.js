@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useReducer, useEffect } from 'react';
-import axios from 'axios';
+import apiClient from '../services/api';
 
 // Create Auth Context
 const AuthContext = createContext();
@@ -71,9 +71,9 @@ export const AuthProvider = ({ children }) => {
   // Set token in axios headers
   useEffect(() => {
     if (state.token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
+      apiClient.defaults.headers.common['Authorization'] = `Bearer ${state.token}`;
     } else {
-      delete axios.defaults.headers.common['Authorization'];
+      delete apiClient.defaults.headers.common['Authorization'];
     }
   }, [state.token]);
 
@@ -82,7 +82,7 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: AUTH_ACTIONS.SET_LOADING, payload: true });
     
     try {
-      const res = await axios.get('/api/auth/profile');
+      const res = await apiClient.get('/auth/profile');
       dispatch({
         type: AUTH_ACTIONS.LOGIN_SUCCESS,
         payload: {
@@ -113,7 +113,7 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: AUTH_ACTIONS.CLEAR_ERROR });
 
     try {
-      const res = await axios.post('/api/auth/register', userData);
+      const res = await apiClient.post('/auth/register', userData);
       
       localStorage.setItem('token', res.data.token);
       
@@ -139,7 +139,7 @@ export const AuthProvider = ({ children }) => {
     dispatch({ type: AUTH_ACTIONS.CLEAR_ERROR });
 
     try {
-      const res = await axios.post('/api/auth/login', userData);
+      const res = await apiClient.post('/auth/login', userData);
       
       localStorage.setItem('token', res.data.token);
       
